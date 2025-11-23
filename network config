@@ -1,0 +1,9 @@
+NETWORKING & ISOLATION RULES:
+• vmbr0 → physical NIC → 192.168.0.0/24 (management only – I can SSH/RDP from laptop)
+• vmbr1 → NAT 192.168.100.0/24 (pfSense WAN)
+• vmbr10 → internal safe LAN 10.0.0.0/24 (pfSense LAN – normal VMs live here)
+• vmbr666 → isolated danger zone 172.16.0.0/24 (no uplink – Kali gets 2nd NIC here only when I flip the switch)
+• pfSense stays behind ISP router (shared flat with two other humans)
+• All VMs get internet via pfSense NAT
+• NO VM touches real home LAN unless I explicitly allow it
+• Kali is air-gapped until I manually activate its attack interface
