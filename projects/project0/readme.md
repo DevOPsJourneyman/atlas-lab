@@ -1,3 +1,4 @@
+
 Objective: Make a VM on atlas02 get a DHCP lease from your pfSense VM ( on atlas01) and successfuly ping 8.8.8.8
 Title: Project 0: Unifying the Atlas Cluster with VXLAN
 Problem: VMs on atlas02 were isolated and could not reach the pfSense gateway on atlas01
