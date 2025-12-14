@@ -7,7 +7,7 @@ Make a VM on atlas02 get a DHCP lease from your pfSense VM on atlas01 and succes
 
 Problem
 
-VMs on atlas02 were isolated and could not reach the pfSense gateway on atlas01.
+VMs on atlas02 were isolated and could not reach vms on atlas01.  Vms on atlas01 could ping vms on atlas02
 
 Solution
 
@@ -32,21 +32,19 @@ Verify DHCP lease from pfSense
 
 Test connectivity by pinging 8.8.8.8
 
-Automation Artifact
-
-(If you automate steps via script, include it here or in /scripts)
-
 Proof / Artifacts
 
 Screenshot of SDN Vnet configuration: /assets/sdn-vnet.png
 
-Screenshot of atlas02 VM pinging pfSense gateway: /assets/ping-gateway.png
+Screenshot of atlas02 VM pinging vm on atlas01: /assets/ping-gateway.png
 
 Screenshot of internet connectivity test: /assets/ping-8.8.8.8.png
 
 /etc/network/interfaces config files
 
 Lessons Learned
+
+check all firewalls; Windows defender blocks everything
 
 VXLAN simplifies multi-node L2 connectivity
 
