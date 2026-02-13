@@ -4,6 +4,7 @@ Atlas Homelab
 This repository documents the build and configuration of a production-like homelab environment, including clustering, software-defined networking, automated backups, and comprehensive monitoring. The lab serves as a testing ground for DevOps practices and infrastructure skills.
 
 🏗️ Architecture
+/home/rt/gitupdates/atlas-lab/atlas-lab/diagrams/Homelab layout.drawio.png
 Network Topology
 
 Network: 192.168.0.0/24
@@ -43,4 +44,3 @@ Metrics: Prometheus
 Visualization: Grafana
 Exporters: node_exporter, windows_exporter
 Alerting: Alertmanager → Discord
-
