@@ -44,9 +44,3 @@ Visualization: Grafana
 Exporters: node_exporter, windows_exporter
 Alerting: Alertmanager → Discord
 
-Future Additions
-
-Configuration Management: Ansible
-Container Orchestration: Docker Swarm or K3s
-CI/CD: GitLab CE or Jenkins
-Log Aggregation: ELK Stack or Loki
