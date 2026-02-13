@@ -3,8 +3,12 @@ Atlas Homelab
 🎯 Project Overview
 This repository documents the build and configuration of a production-like homelab environment, including clustering, software-defined networking, automated backups, and comprehensive monitoring. The lab serves as a testing ground for DevOps practices and infrastructure skills.
 
+What I built & learned
+
+I have set up a proxmox cluster using old desktops. The cluster is home to a variety of VMs which allow me to practice managing them.  I've also set up another desktop with Truenas Scale so that I can back up the VMs and practice disaster recovery. 
+
 🏗️ Architecture
-/home/rt/gitupdates/atlas-lab/atlas-lab/diagrams/Homelab layout.drawio.png
+![Atlas Lab Architecture](diagrams/Homelab layout.drawio.png)
 Network Topology
 
 Network: 192.168.0.0/24
@@ -38,9 +42,4 @@ Storage: TrueNAS SCALE with ZFS
 Networking: pfSense, VLANs (future)
 Backup: Proxmox Backup Server (integrated)
 
-Monitoring & Observability (In Progress)
 
-Metrics: Prometheus
-Visualization: Grafana
-Exporters: node_exporter, windows_exporter
-Alerting: Alertmanager → Discord
