@@ -18,12 +18,14 @@ Storage: Dedicated TrueNAS SCALE appliance
 Monitoring: Prometheus + Grafana stack
 
 ## Hardware Infrastructure
-Device Role Specs IP Address
-Atlas01 Proxmox Node 1HP EliteDesk 800 G3 SFF 32GB RAM, 2x 250GB SSD 192.168.0.10
-Atlas02 Proxmox Node 2HP EliteDesk 800 G3 SFF 32GB RAM, 2x 250GB SSD 192.168.0.11
-TrueNAS Storage NodeHP EliteDesk 800 G3 SFF 24GB RAM, 3x 500GB HDD + NVMe boot 192.168.0.12
-EliteBook 850 G5 Admin Workstation Ubuntu 24.04 Desktop DHCP
-EliteBook 840 G7 Dev/Test Server Ubuntu Server 24.04 TBD
+| Device | Role | IP | Specs
+|--------|------|----|----------|
+| Atlas01 | Proxmox Node 1 | 192.168.0.10 |HP EliteDesk 800 G3 SFF 32GB RAM, 2x 250GB SSD |
+| Atlas02 | Proxmox Node 2 | 192.168.0.11 |HP EliteDesk 800 G3 SFF 32GB RAM, 2x 250GB SSD |
+| TrueNAS | Storage Node | 192.168.0.12 | HP EliteDesk 800 G3 SFF 24GB RAM, 3x 500GB HDD + NVMe boot|
+| TBD     | Admin Workstation | DHCP - 192.180.0.x/24 | HP EliteBook 850 G5 32 GB RAM |
+| TBD     | Dev/Test Server Ubuntu 24 | DHCP - 192.180.0.x/24 | HP EliteBook 840 G7 32 GB RAM |
+
 
 ## Virtual Machines
 VM Name OS Purpose Host IP
