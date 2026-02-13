@@ -8,7 +8,7 @@ This repository documents the build and configuration of a production-like homel
 I have set up a proxmox cluster using old desktops. The cluster is home to a variety of VMs which allow me to practice managing them.  I've also set up another desktop with Truenas Scale so that I can back up the VMs and practice disaster recovery. 
 
 ##  🏗️ Architecture
-![Atlas Lab Architecture](diagrams/Homelab layout.drawio.png)
+![Atlas Lab Architecture](diagrams/homelab-architecture.png)
 
 ## Network Topology
 Network: 192.168.0.0/24
