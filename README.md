@@ -11,11 +11,16 @@ I have set up a proxmox cluster using old desktops. The cluster is home to a var
 ![Atlas Lab Architecture](diagrams/homelab-architecture.png)
 
 ## Network Topology
-Network: 192.168.0.0/24
-Gateway: pfSense VM (192.168.0.1)
-Compute Cluster: 2-node Proxmox cluster
-Storage: Dedicated TrueNAS SCALE appliance
-Monitoring: Prometheus + Grafana stack
+
+|Network:| 192.168.0.0/24|
+
+|Gateway:| pfSense VM (192.168.0.1)|
+
+|Compute Cluster:| 2-node Proxmox cluster|
+
+|Storage:| Dedicated TrueNAS SCALE appliance|
+
+|Monitoring:| Prometheus + Grafana stack|
 
 ## Hardware Infrastructure
 | Device | Role | IP | Specs
@@ -28,19 +33,22 @@ Monitoring: Prometheus + Grafana stack
 
 
 ## Virtual Machines
-VM Name OS Purpose Host IP
-pfSense pfSense 2.7+ Firewall/Router Atlas01 192.168.0.1
-Cronus01 Windows Server 2022 Active Directory (future) Atlas01 TBD
-Hestia01 Tiny11 Windows testing Atlas01 TBD
-Zeus01 Ubuntu Server 24.04 Application server Atlas02 TBD
-Taurus01 Ubuntu 25.04 Development/testing Atlas02 TBD
-Kali Kali Linux Security testing Atlas02 TBD
+|VM | Name | OS | Purpose | Host | IP 
+|-------|-------|------|-------|-------|--------|
+| VM100 | pfSense | pfSense 2.7+ | Firewall/Router | Atlas01 | 192.168.0.1 |
+| VM101 | Cronus01 | Windows Server 2022 | Active Directory (future) | Atlas01 | TBD |
+| VM102 | Hestia01 | Tiny11 | Windows testing | Atlas01 | TBD
+| VM103 | Kali | Kali Linux | Security testing | Atlas02 | TBD |
+| VM104 | Zeus01 | Ubuntu Server 24.04 | Application server | Atlas02 | TBD |
+| VM105 | Taurus01 | Ubuntu 25.04 | Development/testing | Atlas02 | TBD |
+
 
 ## 🛠️ Technology Stack
-Infrastructure
+### Infrastructure
 
-Hypervisor: Proxmox VE 9.1.1 (clustered)
-Storage: TrueNAS SCALE with ZFS
+|Hypervisor: Proxmox VE 9.1.1 (clustered)|
+
+|Storage: TrueNAS SCALE with ZFS|
 Networking: pfSense, VLANs (future)
 Backup: Proxmox Backup Server (integrated)
 
