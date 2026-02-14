@@ -1,7 +1,7 @@
-Future Additions
+# Future Additions
 
 
-Monitoring & Observability (In Progress)
+Monitoring & Observability
 
 Metrics: Prometheus
 Visualization: Grafana
