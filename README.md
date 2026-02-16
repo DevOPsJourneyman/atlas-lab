@@ -44,8 +44,7 @@ Backup:  TrueNAS SCALE with ZFS
 
 ### Network Topology
 
-|Network:| 192.168.0.0/24|
-
-|Gateway:| Home Router (192.168.0.1)|
-
+| Network | 192.168.0.0/24 |
+|---------|----------------|
+| Gateway | Home Router (192.168.0.1) |
 
