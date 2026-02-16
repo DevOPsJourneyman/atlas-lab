@@ -1,5 +1,5 @@
 # Atlas Homelab
-Merge conflict task 1
+
 ##   Project Overview
 This repository documents the build and configuration of a production-like homelab environment, including clustering, software-defined networking, automated backups, and comprehensive monitoring. The lab serves as a testing ground for DevOps practices and infrastructure skills.
 
@@ -11,8 +11,7 @@ I have set up a proxmox cluster using old desktops. The cluster is home to a var
 [![](https://mermaid.ink/img/pako:eNptkt9v2jAQx_-Vk582KaliJyFNHiYV0gLbOqHBVqkJDy4xxGpiI2O3dCT_-0xCqTTmB8v343P3vZMPaCULhhK0ruTrqqRKwyLNBdhzczhMhWZKMN224LpfYPhpImsGP6Wx7j7pgd9NIfrcG8Muq3ngihUNjLLFzP3OxXMfDGEmbfUx39AnrmH-yvWqXPax_h4d8WamZC338MPKaiDN1jRZU5dZYSXc6IruPHyq53kwHsJ8ni7_wfcf_O1_eHLB2_6drw-k_RS_77GHm7tspKQwO3fO1AtTHob3uQX0LiAeIcsLlDTjbMJ2mlM3ZbtnLbfvwhdcvAHGJ-T2A_EbmGTfaMXBbs3sLxOCZpo9MnNewa8nI7Q56wguibD5mi2oURfMSROQ0ELIQRvFC2Q3Ve2Yg2qmanq00eEI5UiXrGY5SuyzYGtqKp2jXLSW21LxKGWNEq2MJZU0m_Jcx2wLqlnK6UbR-uxVTBRMjaTVgZLQJ10RlBzQHiUkHFzh2I_9KIrJwA8c9IYSHHtXIfFwRMLII0EUha2D_nRdbSDwfW9AfBzE1xG-9h3ECq6luu-_dfe727_UVty-?type=png)](https://mermaid.live/edit#pako:eNptkt9v2jAQx_-Vk582KaliJyFNHiYV0gLbOqHBVqkJDy4xxGpiI2O3dCT_-0xCqTTmB8v343P3vZMPaCULhhK0ruTrqqRKwyLNBdhzczhMhWZKMN224LpfYPhpImsGP6Wx7j7pgd9NIfrcG8Muq3ngihUNjLLFzP3OxXMfDGEmbfUx39AnrmH-yvWqXPax_h4d8WamZC338MPKaiDN1jRZU5dZYSXc6IruPHyq53kwHsJ8ni7_wfcf_O1_eHLB2_6drw-k_RS_77GHm7tspKQwO3fO1AtTHob3uQX0LiAeIcsLlDTjbMJ2mlM3ZbtnLbfvwhdcvAHGJ-T2A_EbmGTfaMXBbs3sLxOCZpo9MnNewa8nI7Q56wguibD5mi2oURfMSROQ0ELIQRvFC2Q3Ve2Yg2qmanq00eEI5UiXrGY5SuyzYGtqKp2jXLSW21LxKGWNEq2MJZU0m_Jcx2wLqlnK6UbR-uxVTBRMjaTVgZLQJ10RlBzQHiUkHFzh2I_9KIrJwA8c9IYSHHtXIfFwRMLII0EUha2D_nRdbSDwfW9AfBzE1xG-9h3ECq6luu-_dfe727_UVty-)
 
 
-Merge conflict task 2 -a
-Merge Conflict task 2
+
 
 
 ## Hardware Infrastructure
@@ -23,7 +22,7 @@ Merge Conflict task 2
 | TrueNAS | Storage Node | 192.168.0.12 | HP EliteDesk 800 G3 SFF 24GB RAM, 3x 500GB HDD + NVMe boot|
 | TBD     | Admin Workstation | DHCP - 192.168.0.x/24 | HP EliteBook 850 G5 32 GB RAM |
 | TBD     | Dev/Test Server Ubuntu 24 | DHCP - 192.168.0.x/24 | HP EliteBook 840 G7 32 GB RAM |
-# Merge conflict task 3 -a
+
 
 ## Virtual Machines
 |VM | Name | OS | Purpose | Host | IP 
