@@ -23,7 +23,7 @@ Merge Conflict task 2
 | TrueNAS | Storage Node | 192.168.0.12 | HP EliteDesk 800 G3 SFF 24GB RAM, 3x 500GB HDD + NVMe boot|
 | TBD     | Admin Workstation | DHCP - 192.168.0.x/24 | HP EliteBook 850 G5 32 GB RAM |
 | TBD     | Dev/Test Server Ubuntu 24 | DHCP - 192.168.0.x/24 | HP EliteBook 840 G7 32 GB RAM |
-# merge conflict task 3
+# Merge conflict task 3 -a
 
 ## Virtual Machines
 |VM | Name | OS | Purpose | Host | IP 
