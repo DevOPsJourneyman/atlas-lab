@@ -12,6 +12,7 @@ I have set up a proxmox cluster using old desktops. The cluster is home to a var
 
 
 Merge conflict task 2 -a
+Merge Conflict task 2
 
 
 ## Hardware Infrastructure
