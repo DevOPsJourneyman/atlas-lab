@@ -1,5 +1,5 @@
 # Atlas Homelab
-
+Merge conflict task 1 _ a
 ##   Project Overview
 This repository documents the build and configuration of a production-like homelab environment, including clustering, software-defined networking, automated backups, and comprehensive monitoring. The lab serves as a testing ground for DevOps practices and infrastructure skills.
 
