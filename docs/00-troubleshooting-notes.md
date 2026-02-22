@@ -1,16 +1,19 @@
-Step 1:
-Confirm ip set up on both nodes in /etc/network/interfaces
-Issue** Assigned IP addressses to vmbr10 are acting as host interfaces
-, not a bridge fabric
+# Steps taken during network troubleshooting
+
+## Step 1:
+* Confirm ip set up on both nodes in /etc/network/interfaces
+* Issue** Assigned IP addressses to vmbr10 are acting as host interfaces
+, not a bridge fabric.
 There should be no ip address as it conflicts with 
-pfsense.
-First fix try 
-    remove ip address from vmbr10 on both nodes
+Opnsense.
+#### First fix try:  
+   Remove ip address from vmbr10 on both nodes
+
 Done
 
-Step 2:
-Next step - set up vxlan sdn
-
+## Step 2:
+Set up vxlan sdn
+```bash
 Create sdn zone
     Type: vxlan
     add ip addresses
@@ -21,17 +24,18 @@ Create Vnet inside the sdn
     tag: 10
     Vxlan id auto Assigned
 
-    SDN > status > apply
+SDN > status > apply
 
     ON the pfsense vm > hardware > network device
         Bridge > update to vnet10
         click apply and reboot vm
 
-    configure pfsense interfaces
+configure pfsense interfaces
     Lan 10.0.0.1/24 + enable DCHP
-Step 3:
+```
+## Step 3:
 
-Test > Does atlas VM ping correctly? 
+### Test > Does atlas VM ping correctly? 
     Intially, no. 
     Change nic to vnet10. Ping again.  Success
     pfsense ping check
@@ -47,24 +51,27 @@ Test > Does atlas VM ping correctly?
     unable to ping to atlas01 vm
     atlas01 vm can ping to atlas02 vm
 
-Step 4: 
+## Step 4: 
 
-investigate why only one direction ping
+### investigate why only one direction ping
+ ```   
     also, why can they ping the local Lan? 
     both vms have 10.0.0.1 as default gateway
     Your VXLAN interface exists, but it has no VTEP peers and no group.
     checking each node - ip -d link show type vxlan
     local address is missing → it says nothing after id 10.
-opensense is only running on livecd; need to install
+    opensense is only running on livecd; need to install
     settings reset after a reboot
     installed by logging console as installer
     seems to have sorted the lost network settings after reboot
-back to one direction ping
+    back to one direction ping
     vmbr0 bridge port on atlas01 had nic0, changed to eno1
-atlas01 offline. investigate
+    atlas01 offline. investigate
     nic0 is valid. restored nic0 as the bridge port to resolve
     systemctl status networking - showed the error
-back to one direction ping
+    back to one direction ping
+```
+### Solution
     Bingo!  one vm is win11 and windows defender firewall
     was turned on.  temp disable allowed for ping to work as intended
     turned on firewall and created a new rule to allow icmpv4 ping
