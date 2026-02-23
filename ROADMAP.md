@@ -4,11 +4,9 @@ Planned infrastructure and DevOps projects for this home lab environment.
 Updated as projects are completed.
 
 ## In Progress
-- Network simplification and VM access (SSH/RDP) ✅
-- Repository structure and documentation cleanup
+- Docker: Containerised applications on zeus01 (Week 2-3)
 
 ## Planned
-- Docker: Containerised applications on zeus01 (Week 2-3)
 - project: atlas-api — REST API exposing meal plan and nutrition data
 - project: connect atlas-api to atlas-status dashboard
 - project: atlas-dojo port to standalone Flask app when Python skills sharpen 
@@ -25,6 +23,8 @@ Updated as projects are completed.
 - TrueNAS SCALE storage integration
 - Network migration from VXLAN SDN to simplified bridge (vmbr0)
 - VM provisioning: Ubuntu Server, Ubuntu Desktop, Windows Server 2022, Windows 11, Kali
+- Network simplification and VM access (SSH/RDP) ✅
+- Repository structure and documentation cleanup ✅
 
 ## Decommissioned
 - OPNSense firewall VM (powered off — planned reintroduction with proper network segmentation)
