@@ -1,14 +1,20 @@
 # Atlas Homelab
 
-##   Project Overview
-This repository documents the build and configuration of a production-like homelab environment, including clustering, software-defined networking, automated backups, and comprehensive monitoring. The lab serves as a testing ground for DevOps practices and infrastructure skills.
+## Project Overview
+Two old HP desktops, a NAS box, and a lot of troubleshooting later.
+This is Atlas Lab. A home Kubernetes cluster built from scratch on Proxmox, 
+backed by TrueNAS storage, and used as my hands-on platform for learning 
+DevOps properly. No cloud credits, no managed services. Just real 
+infrastructure I built, broke, and fixed myself.
 
 ## What I built & learned
 
 I have set up a proxmox cluster using old desktops. The cluster is home to a variety of VMs which allow me to practice managing them.  I've also set up another desktop with Truenas Scale so that I can back up the VMs and practice disaster recovery.  Intial set up had a complex networking solution with OPNsense providing firewall services. I have removed that and assigned IPs to all VMs on local LAN.  This allowed me to SSH/RDP directly into the VMs. 
 
+I have decided to reset the VMs to provide a clean slate for k3s phase. The focus will be creating a Kubernetes cluster with 3 nodes across the proxmox cluster. 
+
 ##  🏗️ Architecture
-[![](https://mermaid.ink/img/pako:eNptkt9v2jAQx_-Vk582KaliJyFNHiYV0gLbOqHBVqkJDy4xxGpiI2O3dCT_-0xCqTTmB8v343P3vZMPaCULhhK0ruTrqqRKwyLNBdhzczhMhWZKMN224LpfYPhpImsGP6Wx7j7pgd9NIfrcG8Muq3ngihUNjLLFzP3OxXMfDGEmbfUx39AnrmH-yvWqXPax_h4d8WamZC338MPKaiDN1jRZU5dZYSXc6IruPHyq53kwHsJ8ni7_wfcf_O1_eHLB2_6drw-k_RS_77GHm7tspKQwO3fO1AtTHob3uQX0LiAeIcsLlDTjbMJ2mlM3ZbtnLbfvwhdcvAHGJ-T2A_EbmGTfaMXBbs3sLxOCZpo9MnNewa8nI7Q56wguibD5mi2oURfMSROQ0ELIQRvFC2Q3Ve2Yg2qmanq00eEI5UiXrGY5SuyzYGtqKp2jXLSW21LxKGWNEq2MJZU0m_Jcx2wLqlnK6UbR-uxVTBRMjaTVgZLQJ10RlBzQHiUkHFzh2I_9KIrJwA8c9IYSHHtXIfFwRMLII0EUha2D_nRdbSDwfW9AfBzE1xG-9h3ECq6luu-_dfe727_UVty-?type=png)](https://mermaid.live/edit#pako:eNptkt9v2jAQx_-Vk582KaliJyFNHiYV0gLbOqHBVqkJDy4xxGpiI2O3dCT_-0xCqTTmB8v343P3vZMPaCULhhK0ruTrqqRKwyLNBdhzczhMhWZKMN224LpfYPhpImsGP6Wx7j7pgd9NIfrcG8Muq3ngihUNjLLFzP3OxXMfDGEmbfUx39AnrmH-yvWqXPax_h4d8WamZC338MPKaiDN1jRZU5dZYSXc6IruPHyq53kwHsJ8ni7_wfcf_O1_eHLB2_6drw-k_RS_77GHm7tspKQwO3fO1AtTHob3uQX0LiAeIcsLlDTjbMJ2mlM3ZbtnLbfvwhdcvAHGJ-T2A_EbmGTfaMXBbs3sLxOCZpo9MnNewa8nI7Q56wguibD5mi2oURfMSROQ0ELIQRvFC2Q3Ve2Yg2qmanq00eEI5UiXrGY5SuyzYGtqKp2jXLSW21LxKGWNEq2MJZU0m_Jcx2wLqlnK6UbR-uxVTBRMjaTVgZLQJ10RlBzQHiUkHFzh2I_9KIrJwA8c9IYSHHtXIfFwRMLII0EUha2D_nRdbSDwfW9AfBzE1xG-9h3ECq6luu-_dfe727_UVty-)
+[![](https://mermaid.ink/img/pako:eNqNk91umzAUx1_FOtcEYRtIwsWkfqhb1bWKlqiRNnrhBjexADtyjNY1yRv0Ym-wV-wj7AAhFVUrFSHkvzm__znHH1tYmExCAksr1isyO081wedSO2m1dGQw-EK-mVL-MBXO_EqhFqRVZEfm6kKRYQp3LfYaWYO7ubIy25Hpb-UWK2Rnk8F3pXPkIjIx1pGvainulTtEHG1a2eQ-cYXYBBThl3_PfzuJDnTMfBqP_MCnwXvgzFby5mRaZ21HfYZ9nIz1k7E-SI9g--3cBz42fHMxJadikVfrXVfqp6JYG9V1V9dye02btp9k1Tac8w05M9pZU5BJIbTs1cVe63rrEqJLLgrVuFzhgOAmVI99PHyDsyPOuiLYoYi5sTlucH8TGPvQgHcGvG_QX1jGGwPw8CSqDBKHK-ZBKW0pagnb2jwFt5KlTCHBYSZsnkKq98ishf5pTNlh1lTLFSQPotigqtaZcPJcCTzj5XHWSp1Je2Yq7SChI96YQLKFR5Qx9VlMR2MaDfmYjXjkwR-c5oE_ppxHPMRfYRSEew-emryBH4cRjQMWxDwc4uuBzJQz9rq9Xs0t2_8HHIoBOA)]
 
 
 
@@ -25,13 +31,13 @@ I have set up a proxmox cluster using old desktops. The cluster is home to a var
 
 
 ## Virtual Machines
-|VM | Name | OS | Purpose | Host | IP 
-|-------|-------|------|-------|-------|--------|
-| VM101 | Cronus01 | Windows Server 2022 | Active Directory (future) | Atlas01 | 192.168.0.21|
-| VM102 | Hestia01 | Tiny11 | Windows testing | Atlas01 | 192.168.0.22
-| VM103 | Kali | Kali Linux | Security testing | Atlas02 | 192.168.0.23 |
-| VM104 | Zeus01 | Ubuntu Server 24.04 | Application server | Atlas02 | 192.168.0.24 |
-| VM105 | Taurus01 | Ubuntu 25.04 | Development/testing | Atlas02 | 192.168.0.25 |
+| VMID | Name | OS | Role | Host | IP |
+|------|------|----|------|------|----|
+| 100 | *(reserved)* | — | OPNSense (future) | — | — |
+| 101 | zeus01 | Ubuntu Server 24.04 | k3s control plane | atlas01 | 192.168.0.21 |
+| 102 | zeus02 | Ubuntu Server 24.04 | k3s worker 1 | atlas02 | 192.168.0.22 |
+| 103 | zeus03 | Ubuntu Server 24.04 | k3s worker 2 | atlas02 | 192.168.0.23 |
+| 104 | kali01 | Kali Linux | Pentesting | atlas01 | 192.168.0.24 |
 
 
 ## 🛠️ Technology Stack
