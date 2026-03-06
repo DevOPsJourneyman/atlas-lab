@@ -72,3 +72,35 @@ kubectl apply -f ~/kubernetes/services/atlas-dojo-service.yaml
 ## Access
 
 From any machine on the LAN: `http://192.168.0.21:<nodeport>`
+
+## ConfigMaps
+
+Store non-sensitive configuration:
+```bash
+kubectl apply -f configmaps/atlas-dojo-config.yaml
+```
+
+## Secrets
+
+Store sensitive data (passwords, API keys):
+```bash
+kubectl apply -f secrets/atlas-dojo-secret.yaml
+```
+
+## Namespaces
+
+Deploy to a specific namespace with `-n`:
+```bash
+kubectl create namespace dev
+kubectl apply -f deployments/atlas-dojo-deployment.yaml -n dev
+kubectl apply -f services/atlas-dojo-service-dev.yaml -n dev
+```
+
+## Useful Commands
+
+| Command | Purpose |
+|---------|---------|
+| `kubectl get pods -A` | All pods, all namespaces |
+| `kubectl describe pod <name>` | Detailed state + events |
+| `kubectl logs <pod>` | Container output |
+| `kubectl rollout restart deployment/<name>` | Force redeploy |

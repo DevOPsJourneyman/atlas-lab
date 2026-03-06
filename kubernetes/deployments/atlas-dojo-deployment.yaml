@@ -16,4 +16,9 @@ spec:
       - name: atlas-dojo
         image: devopsjourneyman/atlas-dojo:latest
         ports:
-        - containerPort: 5002
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: atlas-dojo-config
+        - secretRef:
+            name: atlas-dojo-secret
