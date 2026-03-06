@@ -46,4 +46,29 @@ curl -sfL https://get.k3s.io | K3S_URL=https://192.168.0.21:6443 K3S_TOKEN=YOUR_
 kubectl get nodes
 ```
 
-All three nodes should show `Ready`.
+All three nodes should show `Ready`.# Kubernetes Manifests
+
+YAML manifests for deploying apps to the k3s cluster.
+
+## Structure
+
+- `pods/` — standalone pod definitions (learning/testing)
+- `deployments/` — production-style deployments with replicas
+- `services/` — NodePort services for LAN access
+
+## Apps
+
+| App | Deployment | Service | NodePort |
+|-----|------------|---------|----------|
+| nginx | `nginx-deployment.yaml` | `nginx-service.yaml` | 30080 |
+| atlas-dojo | `atlas-dojo-deployment.yaml` | `atlas-dojo-service.yaml` | 30502 |
+
+## Deploy
+```bash
+kubectl apply -f ~/kubernetes/deployments/atlas-dojo-deployment.yaml
+kubectl apply -f ~/kubernetes/services/atlas-dojo-service.yaml
+```
+
+## Access
+
+From any machine on the LAN: `http://192.168.0.21:<nodeport>`

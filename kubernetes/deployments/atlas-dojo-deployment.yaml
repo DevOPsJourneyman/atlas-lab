@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atlas-dojo
+spec:
+  replicas: 2 
+  selector:
+    matchLabels:
+      app: atlas-dojo 
+  template:
+    metadata:
+      labels:
+        app: atlas-dojo
+    spec:
+      containers:
+      - name: atlas-dojo
+        image: devopsjourneyman/atlas-dojo:latest
+        ports:
+        - containerPort: 5002

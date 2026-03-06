@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atlas-status
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: atlas-status
+  template:
+    metadata:
+      labels:
+        app: atlas-status
+    spec:
+      containers:
+      - name: atlas-status
+        image: devopsjourneyman/atlas-status:latest
+        ports:
+          - containerPort: 5000
