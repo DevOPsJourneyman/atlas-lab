@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atlas-nutrition-tracker-deployment
+spec:
+  replicas: 2
+  selector:
+     matchLabels:
+       app: atlas-nutrition-tracker
+  template:
+     metadata:
+       labels:
+         app: atlas-nutrition-tracker
+     spec:
+       containers:
+       - name: atlas-nutrition-tracker
+         image: devopsjourneyman/atlas-nutrition-tracker:latest
+         ports:
+         - containerPort: 5000
+         volumeMounts:
+         - name: meal-data
+           mountPath: /data
+         env:
+         - name: FLASK_ENV
+           value: "production"
+       volumes:
+        - name: meal-data
+          persistentVolumeClaim:
+            claimName: atlas-nutrition-tracker-pvc
+
