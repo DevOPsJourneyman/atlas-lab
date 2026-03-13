@@ -26,6 +26,7 @@ I have decided to reset the VMs to provide a clean slate for k3s phase. The focu
 | Atlas01 | Proxmox Node 1 | 192.168.0.10 |HP EliteDesk 800 G3 SFF 32GB RAM, 2x 250GB SSD |
 | Atlas02 | Proxmox Node 2 | 192.168.0.11 |HP EliteDesk 800 G3 SFF 32GB RAM, 2x 250GB SSD |
 | TrueNAS | Storage Node | 192.168.0.12 | HP EliteDesk 800 G3 SFF 24GB RAM, 3x 500GB HDD + NVMe boot|
+| atlas-pi01 | Raspberry Pi 4 | 192.168.0.13 | 4GB RAM, 32GB SD, active cooling |
 | TBD     | Admin Workstation | DHCP - 192.168.0.x/24 | HP EliteBook 850 G5 32 GB RAM |
 | TBD     | Dev/Test Server Ubuntu 24 | DHCP - 192.168.0.x/24 | HP EliteBook 840 G7 32 GB RAM |
 
@@ -39,14 +40,17 @@ I have decided to reset the VMs to provide a clean slate for k3s phase. The focu
 | 103 | zeus03 | Ubuntu Server 24.04 | k3s worker 2 | atlas02 | 192.168.0.23 |
 | 104 | kali01 | Kali Linux | Pentesting | atlas01 | 192.168.0.24 |
 
+| CTID | Name | OS | Role | Host | IP |
+|------|------|----|------|------|----|
+| 200 | santiago-lxc | Debian 12 | n8n automation bot (Santiago) | atlas01 | 192.168.0.14 |
 
 ## 🛠️ Technology Stack
 ### Infrastructure
 
 Hypervisor: Proxmox VE 9.1.1 (clustered)
-
 Backup:  TrueNAS SCALE with ZFS
-
+Container Orchestration: k3s v1.34.4 (3-node cluster)
+Automation: n8n (Docker, santiago-lxc)
 
 ### Network Topology
 
