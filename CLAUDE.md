@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Rules
+- IMPORTANT: Always run `git status` before making any changes
+- IMPORTANT: Never push directly to main without showing me the diff first
+- Always check `kubectl get services -A` before assigning a new NodePort
+
+
 ## Repository Purpose
 
 This is a **homelab infrastructure-as-code repository** for Atlas Lab — a 3-node k3s Kubernetes cluster running on Proxmox VE, backed by TrueNAS SCALE storage. The repo contains Kubernetes manifests, configuration docs, and operational runbooks. There is no application source code here — apps are built and pushed to Docker Hub (`devopsjourneyman/`) separately.
@@ -69,3 +75,7 @@ kubectl apply -f <file> -n dev               # Apply to dev namespace
 ## Known Issues
 
 - **atlas-status**: Docker socket is unavailable in k3s (containerd runtime). Dashboard cannot query running containers via Docker API.
+
+## Next Up
+- Week 5: GitHub Actions CI/CD pipeline for Flask apps
+- Pipeline: code push → build Docker image → push to Docker Hub
