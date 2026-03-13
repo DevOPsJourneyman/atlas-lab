@@ -55,13 +55,16 @@ YAML manifests for deploying apps to the k3s cluster.
 - `pods/` — standalone pod definitions (learning/testing)
 - `deployments/` — production-style deployments with replicas
 - `services/` — NodePort services for LAN access
+- `persistentvolumeclaims/` — PVC definitions for stateful apps
 
 ## Apps
 
-| App | Deployment | Service | NodePort |
-|-----|------------|---------|----------|
-| nginx | `nginx-deployment.yaml` | `nginx-service.yaml` | 30080 |
-| atlas-dojo | `atlas-dojo-deployment.yaml` | `atlas-dojo-service.yaml` | 30502 |
+| App | Deployment | Service | NodePort | Notes |
+|---|---|---|---|---|
+| nginx | `nginx-deployment.yaml` | `nginx-service.yaml` | 30080 | |
+| atlas-dojo | `atlas-dojo-deployment.yaml` | `atlas-dojo-service.yaml` | 30502 | |
+| atlas-status | `atlas-status-deployment.yaml` | `atlas-status-service.yaml` | 30504 | Docker socket unavailable in k3s (containerd runtime). See GitHub issue. |
+| atlas-nutrition-tracker | `atlas-nutrition-tracker-deployment.yaml` | `atlas-nutrition-tracker-service.yaml` | 30505 | Requires PVC — apply `atlas-nutrition-pvc.yaml` before deployment. |
 
 ## Deploy
 ```bash
