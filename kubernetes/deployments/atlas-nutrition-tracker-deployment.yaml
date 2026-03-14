@@ -3,28 +3,40 @@ kind: Deployment
 metadata:
   name: atlas-nutrition-tracker-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
-     matchLabels:
-       app: atlas-nutrition-tracker
+    matchLabels:
+      app: atlas-nutrition-tracker
   template:
-     metadata:
-       labels:
-         app: atlas-nutrition-tracker
-     spec:
-       containers:
-       - name: atlas-nutrition-tracker
-         image: devopsjourneyman/atlas-nutrition-tracker:latest
-         ports:
-         - containerPort: 5000
-         volumeMounts:
-         - name: meal-data
-           mountPath: /data
-         env:
-         - name: FLASK_ENV
-           value: "production"
-       volumes:
+    metadata:
+      labels:
+        app: atlas-nutrition-tracker
+    spec:
+      containers:
+      - name: atlas-nutrition-tracker
+        image: devopsjourneyman/atlas-nutrition-tracker:latest
+        ports:
+        - containerPort: 5000
+        volumeMounts:
         - name: meal-data
-          persistentVolumeClaim:
-            claimName: atlas-nutrition-tracker-pvc
-
+          mountPath: /data
+        env:
+        - name: FLASK_ENV
+          value: "production"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      volumes:
+      - name: meal-data
+        persistentVolumeClaim:
+          claimName: atlas-nutrition-tracker-pvc
