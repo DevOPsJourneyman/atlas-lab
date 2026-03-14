@@ -64,7 +64,7 @@ YAML manifests for deploying apps to the k3s cluster.
 | nginx | `nginx-deployment.yaml` | `nginx-service.yaml` | 30080 | |
 | atlas-dojo | `atlas-dojo-deployment.yaml` | `atlas-dojo-service.yaml` | 30502 | |
 | atlas-status | `atlas-status-deployment.yaml` | `atlas-status-service.yaml` | 30504 | Docker socket unavailable in k3s (containerd runtime). See GitHub issue. |
-| atlas-nutrition-tracker | `atlas-nutrition-tracker-deployment.yaml` | `atlas-nutrition-tracker-service.yaml` | 30505 | Requires PVC — apply `atlas-nutrition-pvc.yaml` before deployment. |
+| atlas-nutrition-tracker | `atlas-nutrition-tracker-deployment.yaml` | `atlas-nutrition-tracker-service.yaml` | 30505 | Requires PVC — apply `atlas-nutrition-pvc.yaml` before deployment. replicas: 1 (RWO PVC). Resource limits set. Readiness probe on /. |
 
 ## Deploy
 ```bash
