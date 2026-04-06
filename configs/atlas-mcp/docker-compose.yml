@@ -8,44 +8,14 @@ services:
       - "6334:6334"
     volumes:
       - /mnt/mcp-data/qdrant:/qdrant/storage
-    networks:
-      - atlas-mcp
-
-  mcp-proxmox:
-    image: ghcr.io/puregrain/proxmox-emcp:latest
-    container_name: mcp-proxmox
-    restart: unless-stopped
-    ports:
-      - "3001:3001"
     environment:
-      - PROXMOX_HOST=${PROXMOX_HOST}
-      - PROXMOX_TOKEN_ID=${PROXMOX_TOKEN_ID}
-      - PROXMOX_TOKEN_SECRET=${PROXMOX_TOKEN_SECRET}
-      - PROXMOX_VERIFY_SSL=${PROXMOX_VERIFY_SSL:-false}
+      - QDRANT__STORAGE__DISABLE_WAL_CHECKSUM=true
     networks:
       - atlas-mcp
 
-  # mcp-fetch and mcp-filesystem run in stdio mode (standard MCP protocol).
-  # HTTP/SSE bridging via supergateway or mcp-proxy can be added later.
-  mcp-fetch:
-    image: node:20-alpine
-    container_name: mcp-fetch
-    restart: unless-stopped
-    command: ["npx", "-y", "@modelcontextprotocol/server-fetch"]
-    # stdio mode — no port exposed; connect via docker exec or add HTTP bridge
-    networks:
-      - atlas-mcp
-
-  mcp-filesystem:
-    image: node:20-alpine
-    container_name: mcp-filesystem
-    restart: unless-stopped
-    command: ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/data"]
-    volumes:
-      - /mnt/bot-data:/data:ro
-    # stdio mode — no port exposed; connect via docker exec or add HTTP bridge
-    networks:
-      - atlas-mcp
+  # mcp-proxmox: image broken (missing urllib3) — re-enable once fixed
+  # mcp-fetch: @modelcontextprotocol/server-fetch doesn't exist on npm — needs research
+  # mcp-filesystem: working (stdio mode) — re-enable with HTTP bridge when ready
 
 networks:
   atlas-mcp:

@@ -8,19 +8,21 @@
     hostname: atlas-mcp
     ip: "192.168.0.30/24"
     gw: "192.168.0.1"
-    storage: "vg_atlas01_ssd-thinpool"
-    template: "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+    storage: "vm_storage01"
+    template: "local:vztmpl/debian-12-standard_12.12-1_amd64.tar.zst"
     cores: 2
     memory: 2048
     disk: "20"
+    proxmox_token_user: "root@pam"
+    proxmox_token_id: "ansible"
 
   tasks:
     - name: Create LXC container
       community.general.proxmox:
         vmid: "{{ vmid }}"
         api_host: localhost
-        api_user: root@pam
-        api_token_id: atlas-mcp-ro
+        api_user: "{{ proxmox_token_user }}"
+        api_token_id: "{{ proxmox_token_id }}"
         api_token_secret: "{{ proxmox_token_secret }}"
         node: atlas01
         hostname: "{{ hostname }}"
@@ -28,7 +30,7 @@
         storage: "{{ storage }}"
         cores: "{{ cores }}"
         memory: "{{ memory }}"
-        disk: "{{ disk }}G"
+        disk: "{{ storage }}:{{ disk }}"
         netif:
           net0: "name=eth0,bridge=vmbr0,ip={{ ip }},gw={{ gw }}"
         features:
@@ -40,8 +42,8 @@
       community.general.proxmox:
         vmid: "{{ vmid }}"
         api_host: localhost
-        api_user: root@pam
-        api_token_id: atlas-mcp-ro
+        api_user: "{{ proxmox_token_user }}"
+        api_token_id: "{{ proxmox_token_id }}"
         api_token_secret: "{{ proxmox_token_secret }}"
         node: atlas01
         state: started
@@ -50,17 +52,30 @@
       pause:
         seconds: 15
 
-    - name: Add qdrant NFS mount point
-      shell: >
-        pct set {{ vmid }}
-        --mp0 192.168.0.12:/mnt/Atlaspool/mcp-data/qdrant,mp=/mnt/mcp-data/qdrant,shared=1
-      ignore_errors: true
+    - name: Create NFS mount points on atlas01 host
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /mnt/pve/mcp-data
+        - /mnt/bot-data
 
-    - name: Add bot-data NFS mount point
-      shell: >
-        pct set {{ vmid }}
-        --mp1 192.168.0.12:/mnt/Atlaspool/bot-data,mp=/mnt/bot-data,shared=1,ro=1
-      ignore_errors: true
+    - name: Mount NFS shares on atlas01 host
+      mount:
+        path: "{{ item.path }}"
+        src: "{{ item.src }}"
+        fstype: nfs
+        opts: "defaults,_netdev"
+        state: mounted
+      loop:
+        - { path: /mnt/pve/mcp-data, src: "192.168.0.12:/mnt/Atlaspool/mcp-data" }
+        - { path: /mnt/bot-data, src: "192.168.0.12:/mnt/Atlaspool/bot-data" }
+
+    - name: Bind-mount NFS paths into container
+      shell: "pct set {{ vmid }} --mp{{ item.id }} {{ item.host_path }},mp={{ item.ct_path }}{{ item.extra }}"
+      loop:
+        - { id: 0, host_path: /mnt/pve/mcp-data/qdrant, ct_path: /mnt/mcp-data/qdrant, extra: "" }
+        - { id: 1, host_path: /mnt/bot-data, ct_path: /mnt/bot-data, extra: ",ro=1" }
 
 - name: Configure atlas-mcp container
   hosts: atlas_mcp
@@ -71,7 +86,7 @@
       apt:
         name:
           - docker.io
-          - docker-compose-v2
+          - docker-compose
           - nfs-common
         state: present
         update_cache: true
@@ -90,13 +105,13 @@
 
     - name: Copy docker-compose.yml
       copy:
-        src: ../configs/docker-compose.yml
+        src: ../configs/atlas-mcp/docker-compose.yml
         dest: /opt/atlas-mcp/docker-compose.yml
         mode: "0644"
 
     - name: Copy .env (fill secrets before running playbook)
       copy:
-        src: ../configs/.env
+        src: ../configs/atlas-mcp/.env
         dest: /opt/atlas-mcp/.env
         mode: "0600"
 
@@ -114,8 +129,8 @@
           Type=oneshot
           RemainAfterExit=yes
           WorkingDirectory=/opt/atlas-mcp
-          ExecStart=/usr/bin/docker compose up -d
-          ExecStop=/usr/bin/docker compose down
+          ExecStart=/usr/bin/docker-compose up -d
+          ExecStop=/usr/bin/docker-compose down
           TimeoutStartSec=120
 
           [Install]
