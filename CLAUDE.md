@@ -1,5 +1,18 @@
 # CLAUDE.md
 
+# Shared Context (Read at Session Start)
+- **CONTEXT.md** — `/mnt/bot-data/shared/CONTEXT.md` — cross-session intelligence from all CC instances and Claude.ai
+- **PANTHEON.md** — `/mnt/bot-data/shared/PANTHEON.md` — canonical agent roster, IPs, shared dir map
+- **WORLD.md** — `/mnt/bot-data/shared/WORLD.md` — new info feed from Mundo
+
+Read these at the start of any session where Pantheon state or agent context is relevant.
+At session end, append a `## YYYY-MM-DD — [Topic] (Claude Code / laptop)` entry to CONTEXT.md for any decisions or changes that atlas02 CC or agents should know about.
+
+## Sessions Tool
+Session export script: `/mnt/bot-data/shared/tools/export-sessions.py`
+Usage: `python3 /mnt/bot-data/shared/tools/export-sessions.py --last 5`
+Command file: copy `/mnt/bot-data/shared/tools/sessions-command.md` → `~/.claude/commands/sessions.md`
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Rules
@@ -59,7 +72,10 @@ Access any app from LAN: `http://192.168.0.21:<nodeport>`
 | atlas02 | Proxmox node 2 | 192.168.0.11 |
 | TrueNAS | Storage/backup | 192.168.0.12 |
 | atlas-pi01 | Raspberry Pi 4 | 192.168.0.13 |
-| santiago-lxc | n8n automation (Debian LXC) | 192.168.0.14 |
+| Santiago (agent) | Hermes agent — life logging | 192.168.0.40 |
+| Kirk (agent) | Hermes agent — pioneer/tester | 192.168.0.41 |
+| Ramon (agent) | Hermes agent — briefing | 192.168.0.42 |
+| Tesla (agent) | Hermes agent — infra | 192.168.0.43 |
 
 ## Useful kubectl Commands
 

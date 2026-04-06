@@ -1,0 +1,52 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - /mnt/mcp-data/qdrant:/qdrant/storage
+    networks:
+      - atlas-mcp
+
+  mcp-proxmox:
+    image: ghcr.io/puregrain/proxmox-emcp:latest
+    container_name: mcp-proxmox
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - PROXMOX_HOST=${PROXMOX_HOST}
+      - PROXMOX_TOKEN_ID=${PROXMOX_TOKEN_ID}
+      - PROXMOX_TOKEN_SECRET=${PROXMOX_TOKEN_SECRET}
+      - PROXMOX_VERIFY_SSL=${PROXMOX_VERIFY_SSL:-false}
+    networks:
+      - atlas-mcp
+
+  # mcp-fetch and mcp-filesystem run in stdio mode (standard MCP protocol).
+  # HTTP/SSE bridging via supergateway or mcp-proxy can be added later.
+  mcp-fetch:
+    image: node:20-alpine
+    container_name: mcp-fetch
+    restart: unless-stopped
+    command: ["npx", "-y", "@modelcontextprotocol/server-fetch"]
+    # stdio mode — no port exposed; connect via docker exec or add HTTP bridge
+    networks:
+      - atlas-mcp
+
+  mcp-filesystem:
+    image: node:20-alpine
+    container_name: mcp-filesystem
+    restart: unless-stopped
+    command: ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/data"]
+    volumes:
+      - /mnt/bot-data:/data:ro
+    # stdio mode — no port exposed; connect via docker exec or add HTTP bridge
+    networks:
+      - atlas-mcp
+
+networks:
+  atlas-mcp:
+    driver: bridge
