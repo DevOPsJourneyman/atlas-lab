@@ -1,0 +1,21 @@
+---
+- name: Install Node.js for MCP
+  hosts: atlas-mcp
+  become: yes
+  tasks:
+    - name: Add NodeSource repository (Node 20.x)
+      shell: curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+      
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+
+    - name: Verify Node Installation
+      command: node -v
+      register: node_v
+      
+    - name: Show Node Version
+      debug:
+        msg: "Node version installed: {{ node_v.stdout }}"

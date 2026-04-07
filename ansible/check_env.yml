@@ -1,0 +1,20 @@
+---
+- name: Audit Language Runtimes
+  hosts: atlas-mcp
+  become: yes
+  tasks:
+    - name: Check for Node.js
+      command: node -v
+      register: node_check
+      ignore_errors: yes
+
+    - name: Check for Python 3
+      command: python3 --version
+      register: python_check
+      ignore_errors: yes
+
+    - name: Report Findings
+      debug:
+        msg: 
+          - "Node version: {{ node_check.stdout | default('NOT INSTALLED') }}"
+          - "Python version: {{ python_check.stdout | default('NOT INSTALLED') }}"

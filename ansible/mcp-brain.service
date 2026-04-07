@@ -1,0 +1,17 @@
+[Unit]
+Description=Atlas MCP Memory Brain
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/mcp-memory
+ExecStart=/usr/bin/node /opt/mcp-memory/index.js
+Restart=always
+RestartSec=3
+StandardOutput=append:/var/log/mcp.log
+StandardError=append:/var/log/mcp.log
+
+
+[Install]
+WantedBy=multi-user.target

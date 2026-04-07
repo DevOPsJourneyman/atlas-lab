@@ -2,60 +2,120 @@
 
 ## Project Overview
 Two old HP desktops, a NAS box, and a lot of troubleshooting later.
-This is Atlas Lab. A home Kubernetes cluster built from scratch on Proxmox, 
-backed by TrueNAS storage, and used as my hands-on platform for learning 
-DevOps properly. No cloud credits, no managed services. Just real 
-infrastructure I built, broke, and fixed myself.
+This is Atlas Lab — a home infrastructure platform built from scratch on Proxmox,
+backed by TrueNAS storage, used as a hands-on learning platform for DevOps.
+No cloud credits, no managed services. Real infrastructure built, broken, and fixed.
 
-## What I built & learned
+## What I built
 
-I have set up a proxmox cluster using old desktops. The cluster is home to a variety of VMs which allow me to practice managing them.  I've also set up another desktop with Truenas Scale so that I can back up the VMs and practice disaster recovery.  Intial set up had a complex networking solution with OPNsense providing firewall services. I have removed that and assigned IPs to all VMs on local LAN.  This allowed me to SSH/RDP directly into the VMs. 
+Started with a Proxmox cluster running VMs. Added TrueNAS for ZFS-backed storage and
+disaster recovery practice. Moved through OPNsense (removed — too complex), k3s
+(3-node cluster across the two Proxmox nodes), and into the current phase: an AI agent
+platform called the Pantheon, using Hermes as the agent runtime.
 
-I have decided to reset the VMs to provide a clean slate for k3s phase. The focus will be creating a Kubernetes cluster with 3 nodes across the proxmox cluster. 
-
-##  🏗️ Architecture
-[![](https://mermaid.ink/img/pako:eNqNk91umzAUx1_FOtcEYRtIwsWkfqhb1bWKlqiRNnrhBjexADtyjNY1yRv0Ym-wV-wj7AAhFVUrFSHkvzm__znHH1tYmExCAksr1isyO081wedSO2m1dGQw-EK-mVL-MBXO_EqhFqRVZEfm6kKRYQp3LfYaWYO7ubIy25Hpb-UWK2Rnk8F3pXPkIjIx1pGvainulTtEHG1a2eQ-cYXYBBThl3_PfzuJDnTMfBqP_MCnwXvgzFby5mRaZ21HfYZ9nIz1k7E-SI9g--3cBz42fHMxJadikVfrXVfqp6JYG9V1V9dye02btp9k1Tac8w05M9pZU5BJIbTs1cVe63rrEqJLLgrVuFzhgOAmVI99PHyDsyPOuiLYoYi5sTlucH8TGPvQgHcGvG_QX1jGGwPw8CSqDBKHK-ZBKW0pagnb2jwFt5KlTCHBYSZsnkKq98ishf5pTNlh1lTLFSQPotigqtaZcPJcCTzj5XHWSp1Je2Yq7SChI96YQLKFR5Qx9VlMR2MaDfmYjXjkwR-c5oE_ppxHPMRfYRSEew-emryBH4cRjQMWxDwc4uuBzJQz9rq9Xs0t2_8HHIoBOA)]
-
-
-
-
+The Pantheon is the current focus — four AI agents with distinct roles, running as
+unprivileged LXC containers, with shared context over NFS and a centralized MCP memory
+brain for cross-agent knowledge.
 
 ## Hardware Infrastructure
-| Device | Role | IP | Specs
-|--------|------|----|----------|
-| Atlas01 | Proxmox Node 1 | 192.168.0.x |HP EliteDesk 800 G3 SFF 32GB RAM, 2x 250GB SSD |
-| Atlas02 | Proxmox Node 2 | 192.168.0.x |HP EliteDesk 800 G3 SFF 32GB RAM, 2x 250GB SSD |
-| TrueNAS | Storage Node | 192.168.0.x | HP EliteDesk 800 G3 SFF 24GB RAM, 3x 500GB HDD + NVMe boot|
-| atlas-pi01 | Raspberry Pi 4 | 192.168.0.x | 4GB RAM, 32GB SD, active cooling |
-| TBD     | Admin Workstation | DHCP - 192.168.0.x/24 | HP EliteBook 850 G5 32 GB RAM |
-| TBD     | Dev/Test Server Ubuntu 24 | DHCP - 192.168.0.x/24 | HP EliteBook 840 G7 32 GB RAM |
 
+| Device | Role | IP | Specs |
+|--------|------|----|-------|
+| atlas01 | Proxmox Node 1 | 192.168.0.10 | HP EliteDesk 800 G3 SFF, 32GB RAM, 2x 250GB SSD |
+| atlas02 | Proxmox Node 2 | 192.168.0.11 | HP EliteDesk 800 G3 SFF, 32GB RAM, 2x 250GB SSD |
+| TrueNAS | Storage Node | 192.168.0.12 | HP EliteDesk 800 G3 SFF, 24GB RAM, 3x 500GB HDD + NVMe boot |
+| kronos | Admin Workstation | 192.168.0.141 | HP EliteBook 850 G5, 32GB RAM |
+| atlas-pi01 | Raspberry Pi 4 | — | 4GB RAM, 32GB SD — offline (PSU failure) |
 
-## Virtual Machines
+## Virtual Machines & Containers
+
+### VMs (100s)
 | VMID | Name | OS | Role | Host | IP |
 |------|------|----|------|------|----|
-| 100 | *(reserved)* | — | OPNSense (future) | — | — |
-| 101 | zeus01 | Ubuntu Server 24.04 | k3s control plane | atlas01 | 192.168.0.x |
-| 102 | zeus02 | Ubuntu Server 24.04 | k3s worker 1 | atlas02 | 192.168.0.x |
-| 103 | zeus03 | Ubuntu Server 24.04 | k3s worker 2 | atlas02 | 192.168.0.x |
-| 104 | kali01 | Kali Linux | Security testing | atlas01 | 192.168.0.x |
+| 101 | zeus01 | Ubuntu 24.04 | k3s control plane | atlas01 | 192.168.0.21 |
+| 102 | zeus02 | Ubuntu 24.04 | k3s worker 1 | atlas02 | 192.168.0.22 |
+| 103 | zeus03 | Ubuntu 24.04 | k3s worker 2 | atlas02 | 192.168.0.23 |
+| 104 | kali01 | Kali Linux | Security testing | atlas01 | 192.168.0.24 |
 
+### Pantheon Agents (200s)
 | CTID | Name | OS | Role | Host | IP |
 |------|------|----|------|------|----|
-| 201 | hermes-lxc | Debian 12 | AI accountability bot (Santiago v2) | atlas01 | 192.168.0.x |
+| 201 | Santiago | Debian 12 | Life OS — habits, food, sleep logging | atlas01 | 192.168.0.40 |
+| 202 | Kirk | Debian 12 | Pioneer — supervisor, tester, coordination | atlas01 | 192.168.0.41 |
+| 203 | Ramon | Debian 12 | Briefing agent — morning brief, weekly report | atlas01 | 192.168.0.42 |
+| 204 | Tesla | Debian 12 | Infra health monitoring + container builder | atlas02 | 192.168.0.43 |
+
+### Infrastructure Containers (300s)
+| CTID | Name | OS | Role | Host | IP |
+|------|------|----|------|------|----|
+| 301 | atlas-mcp | Debian 12 | MCP services: Qdrant + memory brain | atlas01 | 192.168.0.30 |
+
+## Technology Stack
+
+**Infrastructure:** Proxmox VE (clustered) · TrueNAS SCALE (ZFS) · k3s (3-node)
+
+**AI Platform:** Hermes agent runtime · Qdrant vector DB · MCP (Model Context Protocol)
+
+**Automation:** Ansible · systemd · NFS for shared agent context
+
+**Network:** 192.168.0.0/24 · Home router gateway (192.168.0.1)
+
+## Pantheon — AI Agent Platform
+
+Four agents running as Hermes-powered LXC containers, each with a defined role and personality.
+All agents share context over NFS (`/mnt/bot-data/shared/`) and can write to the centralized
+memory brain via MCP.
+
+### atlas-mcp — The Shared Brain
+
+`atlas-mcp` (CTID 301, 192.168.0.30) runs:
+- **Qdrant** on port 6333 — vector database for persistent agent memory
+- **mcp-brain** on port 3000 — Node.js MCP bridge (SSE) connecting agents to Qdrant
+
+Agents connect via `mcp_servers.json`:
+```json
+{
+  "mcpServers": {
+    "atlas-memory": {
+      "url": "http://192.168.0.30:3000/sse"
+    }
+  }
+}
 ```
 
-## 🛠️ Technology Stack
-### Infrastructure
+Config deployed at `/home/zeus/.hermes/mcp_servers.json` (owner: `zeus:hermes`, mode `0664`).
 
-Hypervisor: Proxmox VE (clustered)
-Backup:  TrueNAS SCALE with ZFS
-Container Orchestration: k3s (3-node cluster)
-Automation: n8n (Docker, santiago-lxc)
+### Verification
 
-### Network Topology
+| Task | Command |
+|------|---------|
+| Brain health | `curl -s http://192.168.0.30:3000/health` |
+| Brain service | `ssh root@192.168.0.30 systemctl status mcp-brain` |
+| Qdrant status | `curl -s http://192.168.0.30:6333/health` |
+| Agent configs | `ansible agents -i ansible/inventory.ini -m command -a "ls -la /home/zeus/.hermes/mcp_servers.json" --become` |
 
-| Network | 192.168.0.0/24 |
-|---------|----------------|
-| Gateway | Home Router (192.168.0.1) |
+## Ansible Playbooks
 
+| Playbook | Purpose |
+|----------|---------|
+| `atlas-mcp.yml` | Provision atlas-mcp LXC on atlas01, bind-mount NFS paths |
+| `install_node.yml` | Install Node.js 20.x on atlas-mcp |
+| `deploy_memory_mcp.yml` | Deploy mcp-brain app + systemd service to atlas-mcp |
+| `setup_foundation.yml` | Install Node + Python tooling on atlas-mcp |
+| `check_env.yml` | Audit Node/Python versions on atlas-mcp |
+
+Run order for a fresh deploy:
+```bash
+ansible-playbook -i ansible/inventory.ini ansible/atlas-mcp.yml -e proxmox_token_secret=SECRET
+ansible-playbook -i ansible/inventory.ini ansible/install_node.yml
+ansible-playbook -i ansible/inventory.ini ansible/deploy_memory_mcp.yml
+```
+
+## DevOps Roadmap
+
+- Weeks 1–3: Proxmox setup, TrueNAS, networking
+- Weeks 4–5: k3s cluster, app deployments
+- Week 6: Pantheon agent platform (Hermes, LXC)
+- Week 7: Ansible — infrastructure as code (atlas-mcp provisioning)
+- Week 8: Terraform (planned)
+- Week 9: Monitoring — Prometheus + Grafana (planned)

@@ -1,0 +1,21 @@
+---
+- name: Setup AI Foundation (Node & Python Tools)
+  hosts: atlas-mcp
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Node.js and NPM
+      apt:
+        name: 
+          - nodejs
+          - npm
+        state: present
+
+    - name: Install Qdrant Python Client
+      pip:
+        name: qdrant-client
+        executable: pip3
+        state: present
