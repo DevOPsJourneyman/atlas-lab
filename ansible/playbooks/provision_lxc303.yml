@@ -1,0 +1,101 @@
+---
+# Phase 1 — Provision LXC 303 (atlas-git) on atlas02
+#
+# Prerequisites:
+#   - proxmoxer installed on atlas01: pip3 install proxmoxer requests
+#   - Ansible token created in Proxmox: root@pam / token ID: ansible (no privilege separation)
+#
+# Run:
+#   ansible-playbook playbooks/provision_lxc303.yml -e proxmox_token_secret=<secret>
+
+- name: Provision LXC 303 (atlas-git) on atlas02
+  hosts: atlas01
+  gather_facts: false
+
+  vars:
+    vmid: 303
+    hostname: atlas-git
+    node: atlas02
+    ip: "192.168.0.32/24"
+    gw: "192.168.0.1"
+    storage: "vm_storage02"
+    template: "local:vztmpl/debian-12-standard_12.12-1_amd64.tar.zst"
+    cores: 1
+    memory: 512
+    disk: "20"
+    proxmox_token_user: "root@pam"
+    proxmox_token_id: "ansible"
+    # proxmox_token_secret: pass via -e at runtime
+
+  tasks:
+    - name: Create LXC 303 on atlas02
+      community.general.proxmox:
+        vmid: "{{ vmid }}"
+        api_host: localhost
+        api_user: "{{ proxmox_token_user }}"
+        api_token_id: "{{ proxmox_token_id }}"
+        api_token_secret: "{{ proxmox_token_secret }}"
+        node: "{{ node }}"
+        hostname: "{{ hostname }}"
+        ostemplate: "{{ template }}"
+        storage: "{{ storage }}"
+        cores: "{{ cores }}"
+        memory: "{{ memory }}"
+        disk: "{{ storage }}:{{ disk }}"
+        netif:
+          net0: "name=eth0,bridge=vmbr0,ip={{ ip }},gw={{ gw }},firewall=1"
+        features:
+          - nesting=1
+        unprivileged: true
+        nameserver: "1.1.1.1"
+        state: present
+
+    - name: Start LXC 303
+      community.general.proxmox:
+        vmid: "{{ vmid }}"
+        api_host: localhost
+        api_user: "{{ proxmox_token_user }}"
+        api_token_id: "{{ proxmox_token_id }}"
+        api_token_secret: "{{ proxmox_token_secret }}"
+        node: "{{ node }}"
+        state: started
+
+    - name: Wait for container to boot
+      pause:
+        seconds: 15
+
+- name: Move sshd to port 2222 on atlas-git
+  hosts: atlas_git
+  gather_facts: false
+  vars:
+    ansible_port: 22  # container starts on 22; inventory sets 2222 post-config
+
+  tasks:
+    - name: Wait for SSH to be reachable
+      wait_for_connection:
+        timeout: 60
+
+    - name: Install Python (needed for Ansible)
+      raw: apt-get update -qq && apt-get install -y -qq python3
+      changed_when: true
+
+    - name: Set sshd port to 2222 in config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?Port '
+        line: "Port 2222"
+        state: present
+
+    - name: Disable ssh.socket (Debian 12 socket activation owns port 22)
+      raw: systemctl disable --now ssh.socket || true
+      changed_when: true
+
+    - name: Enable ssh.service and restart on port 2222
+      raw: systemctl enable --now ssh.service && systemctl restart ssh
+      changed_when: true
+
+- name: Add atlas-git to known good state
+  hosts: atlas_git
+  gather_facts: true
+  roles:
+    - base_lxc

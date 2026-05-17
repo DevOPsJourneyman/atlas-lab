@@ -1,0 +1,8 @@
+---
+nfs_mounts: []
+
+lxc_cores: 1
+lxc_memory_mb: 512
+lxc_disk_gb: 20
+lxc_storage: vm_storage02
+lxc_unprivileged: true
