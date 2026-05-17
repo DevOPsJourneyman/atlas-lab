@@ -1,0 +1,13 @@
+---
+# Reconcile MCP services on atlas-mcp (301)
+# Run: ansible-playbook playbooks/configure_mcp.yml
+
+- name: Base setup for atlas-mcp
+  hosts: mcp_hosts
+  roles:
+    - base_lxc
+
+- name: Configure MCP services
+  hosts: mcp_hosts
+  roles:
+    - mcp_services

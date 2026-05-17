@@ -1,0 +1,16 @@
+[Unit]
+Description=Hermes Agent - {{ agent_name }}
+After=network.target
+
+[Service]
+Type=simple
+User={{ agent_name }}
+WorkingDirectory={{ hermes_home }}
+Environment=HERMES_HOME={{ hermes_home }}
+EnvironmentFile={{ hermes_secrets_path }}
+ExecStart={{ hermes_python }} -m hermes_cli.main gateway run
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

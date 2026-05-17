@@ -1,0 +1,37 @@
+---
+- name: Ensure agent user exists
+  user:
+    name: "{{ agent_name }}"
+    home: "/home/{{ agent_name }}"
+    shell: /bin/bash
+    create_home: yes
+    state: present
+
+- name: Create hermes home directory
+  file:
+    path: "{{ hermes_home }}"
+    owner: "{{ agent_name }}"
+    group: "{{ agent_name }}"
+    state: directory
+    mode: '0755'
+
+- name: Create secrets directory
+  file:
+    path: /etc/hermes
+    state: directory
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Deploy hermes systemd service
+  template:
+    src: hermes-agent.service.j2
+    dest: "/etc/systemd/system/{{ hermes_service_name }}.service"
+    mode: '0644'
+  notify: Reload and restart hermes
+
+- name: Enable hermes service
+  systemd:
+    name: "{{ hermes_service_name }}"
+    enabled: yes
+    daemon_reload: yes

@@ -1,0 +1,7 @@
+---
+agent_name: ""  # required — set per host in inventory
+hermes_home: "/home/{{ agent_name }}/.hermes"
+hermes_venv: "{{ hermes_home }}/hermes-agent/venv"
+hermes_python: "{{ hermes_venv }}/bin/python"
+hermes_secrets_path: "/etc/hermes/{{ agent_name }}-secrets"
+hermes_service_name: "hermes-{{ agent_name }}"

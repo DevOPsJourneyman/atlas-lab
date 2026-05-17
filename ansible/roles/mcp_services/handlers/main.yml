@@ -1,0 +1,8 @@
+---
+- name: Reload and restart MCP services
+  systemd:
+    name: "mcp-{{ item.name }}"
+    state: restarted
+    daemon_reload: yes
+  loop: "{{ mcp_services }}"
+  when: item.exec != ""

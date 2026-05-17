@@ -1,0 +1,4 @@
+---
+mcp_proxy_bin: /usr/local/bin/mcp-proxy
+mcp_env_dir: /etc/mcp
+mcp_services: []

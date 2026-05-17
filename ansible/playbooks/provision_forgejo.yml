@@ -1,0 +1,20 @@
+---
+# Phase 1-2: Provision LXC 303 and install Forgejo
+# Prerequisites: LXC 303 must exist and be reachable at 192.168.0.32
+#
+# Required vault vars (ansible-vault):
+#   forgejo_secret_key
+#   forgejo_jwt_secret
+#   forgejo_internal_token
+#
+# Run: ansible-playbook playbooks/provision_forgejo.yml --ask-vault-pass
+
+- name: Base setup for atlas-git
+  hosts: git_servers
+  roles:
+    - base_lxc
+
+- name: Install and configure Forgejo
+  hosts: git_servers
+  roles:
+    - forgejo

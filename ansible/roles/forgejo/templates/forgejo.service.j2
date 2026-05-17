@@ -1,0 +1,19 @@
+[Unit]
+Description=Forgejo Git Server
+After=network.target
+
+[Service]
+Type=simple
+User={{ forgejo_user }}
+Group={{ forgejo_group }}
+WorkingDirectory={{ forgejo_data_dir }}
+ExecStart={{ forgejo_bin }} web --config {{ forgejo_custom_dir }}/app.ini
+Restart=always
+RestartSec=5
+Environment=HOME={{ forgejo_home }}
+Environment=USER={{ forgejo_user }}
+Environment=GITEA_WORK_DIR={{ forgejo_data_dir }}
+Environment=GITEA_CUSTOM={{ forgejo_custom_dir }}
+
+[Install]
+WantedBy=multi-user.target

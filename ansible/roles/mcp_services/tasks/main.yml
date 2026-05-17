@@ -1,0 +1,26 @@
+---
+- name: Create MCP env dir
+  file:
+    path: "{{ mcp_env_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Deploy MCP service unit files
+  template:
+    src: mcp-service.service.j2
+    dest: "/etc/systemd/system/mcp-{{ item.name }}.service"
+    mode: '0644'
+  loop: "{{ mcp_services }}"
+  when: item.exec != ""
+  notify: Reload and restart MCP services
+
+- name: Enable MCP services
+  systemd:
+    name: "mcp-{{ item.name }}"
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  loop: "{{ mcp_services }}"
+  when: item.exec != ""

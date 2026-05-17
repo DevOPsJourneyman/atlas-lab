@@ -1,0 +1,68 @@
+---
+- name: Create git group
+  group:
+    name: "{{ forgejo_group }}"
+    system: yes
+    state: present
+
+- name: Create git user
+  user:
+    name: "{{ forgejo_user }}"
+    group: "{{ forgejo_group }}"
+    home: "{{ forgejo_home }}"
+    shell: /bin/bash
+    system: yes
+    create_home: yes
+    state: present
+
+- name: Create Forgejo directories
+  file:
+    path: "{{ item }}"
+    owner: "{{ forgejo_user }}"
+    group: "{{ forgejo_group }}"
+    state: directory
+    mode: '0750'
+  loop:
+    - "{{ forgejo_data_dir }}"
+    - "{{ forgejo_custom_dir }}"
+    - "{{ forgejo_log_dir }}"
+    - "{{ forgejo_repos_dir }}"
+    - "{{ forgejo_data_dir }}/lfs"
+
+- name: Download Forgejo binary
+  get_url:
+    url: "https://codeberg.org/forgejo/forgejo/releases/download/v{{ forgejo_version }}/forgejo-{{ forgejo_version }}-{{ forgejo_arch }}"
+    dest: "{{ forgejo_bin }}"
+    mode: '0755'
+  notify: Restart forgejo
+
+- name: Move sshd to port 2222
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?Port '
+    line: "Port {{ forgejo_admin_ssh_port }}"
+    state: present
+  notify: Restart sshd
+
+- name: Deploy app.ini
+  template:
+    src: app.ini.j2
+    dest: "{{ forgejo_custom_dir }}/app.ini"
+    owner: "{{ forgejo_user }}"
+    group: "{{ forgejo_group }}"
+    mode: '0640'
+  notify: Restart forgejo
+
+- name: Deploy forgejo systemd service
+  template:
+    src: forgejo.service.j2
+    dest: /etc/systemd/system/forgejo.service
+    mode: '0644'
+  notify: Restart forgejo
+
+- name: Enable and start forgejo
+  systemd:
+    name: forgejo
+    enabled: yes
+    state: started
+    daemon_reload: yes

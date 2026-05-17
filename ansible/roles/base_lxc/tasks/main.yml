@@ -1,0 +1,37 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install base packages
+  apt:
+    name: "{{ base_packages }}"
+    state: present
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
+
+- name: Create NFS mount points
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ nfs_mounts }}"
+
+- name: Mount NFS shares
+  mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: nfs
+    opts: "{{ item.opts | default('defaults,_netdev,nofail') }}"
+    state: mounted
+  loop: "{{ nfs_mounts }}"
+  when: nfs_mounts | length > 0
+
+- name: Ensure SSH is enabled and running
+  systemd:
+    name: ssh
+    enabled: yes
+    state: started

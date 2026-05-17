@@ -1,0 +1,14 @@
+[Unit]
+Description={{ item.name | capitalize }} MCP Server
+After=network.target
+
+[Service]
+ExecStart={{ mcp_proxy_bin }} --port {{ item.port }} -- {{ item.exec }}
+Restart=always
+RestartSec=5
+{% if item.env_file is defined %}
+EnvironmentFile={{ item.env_file }}
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target

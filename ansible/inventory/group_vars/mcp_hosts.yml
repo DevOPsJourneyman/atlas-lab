@@ -1,0 +1,44 @@
+---
+lxc_cores: 2
+lxc_memory_mb: 2048
+lxc_disk_gb: 20
+lxc_storage: vm_storage01
+lxc_unprivileged: true
+lxc_features:
+  - nesting=1
+lxc_nfs_mounts:
+  - host_path: /mnt/bot-data
+    ct_path: /mnt/bot-data
+  - host_path: /mnt/cc-shared
+    ct_path: /mnt/cc-shared
+  - host_path: /mnt/mundo-files
+    ct_path: /mnt/mundo-files
+  - host_path: /mnt/pve/mcp-data/qdrant
+    ct_path: /mnt/mcp-data/qdrant
+
+# MCP services running on atlas-mcp (301)
+# Each runs via mcp-proxy on a dedicated port
+mcp_services:
+  - name: filesystem
+    port: 3002
+    exec: /bin/npx @modelcontextprotocol/server-filesystem /mnt/bot-data /mnt/cc-shared /mnt/mundo-files
+  - name: proxmox
+    port: 3003
+    exec: /usr/bin/node /usr/lib/node_modules/proxmox-mcp/dist/index.js
+    env_file: /etc/mcp/proxmox.env
+  - name: caldav
+    port: 3004
+    exec: ""  # fill in from service file
+    env_file: /etc/mcp/caldav.env
+  - name: mempalace
+    port: 3005
+    exec: ""  # fill in from service file
+  - name: nutrition
+    port: 3006
+    exec: ""  # fill in from service file
+  - name: research
+    port: 3007
+    exec: ""  # fill in from service file
+  - name: tasks
+    port: 3008
+    exec: ""  # fill in from service file

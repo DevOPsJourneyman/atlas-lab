@@ -1,0 +1,23 @@
+---
+forgejo_version: "9.0.3"  # pin to latest stable at install time
+forgejo_arch: linux-amd64
+forgejo_user: git
+forgejo_group: git
+forgejo_home: /var/lib/forgejo
+forgejo_data_dir: /var/lib/forgejo
+forgejo_custom_dir: /etc/forgejo
+forgejo_log_dir: /var/log/forgejo
+forgejo_bin: /usr/local/bin/forgejo
+forgejo_http_port: 3000
+forgejo_ssh_port: 22      # Forgejo owns port 22; sshd moved to 2222
+forgejo_admin_ssh_port: 2222
+forgejo_domain: git.atlas.local
+forgejo_app_name: "Atlas Git"
+forgejo_db_type: sqlite3
+forgejo_db_path: "{{ forgejo_data_dir }}/forgejo.db"
+forgejo_repos_dir: "{{ forgejo_data_dir }}/repositories"
+
+# Secrets — override with ansible-vault encrypted vars
+# forgejo_secret_key: ""   # required
+# forgejo_jwt_secret: ""   # required
+# forgejo_internal_token: "" # required

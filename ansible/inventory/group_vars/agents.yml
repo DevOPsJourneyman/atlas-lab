@@ -1,0 +1,23 @@
+---
+# Common config for all Hermes agent LXCs (201-203 + hermes-test 204)
+lxc_cores: 2
+lxc_memory_mb: 4096
+lxc_disk_gb: 20
+lxc_storage: vm_storage01
+lxc_unprivileged: true
+lxc_features:
+  - nesting=1
+lxc_nfs_mounts:
+  - host_path: /mnt/bot-data
+    ct_path: /mnt/bot-data
+  - host_path: /mnt/cc-shared
+    ct_path: /mnt/cc-shared
+lxc_idmap:
+  - "u 0 100000 1000"
+  - "g 0 100000 1000"
+  - "u 1000 1000 1"
+  - "g 1000 1000 1"
+  - "u 1001 1001 1"
+  - "g 1001 1001 1"
+  - "u 1002 101002 64534"
+  - "g 1002 101002 64534"

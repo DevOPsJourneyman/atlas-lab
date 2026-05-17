@@ -1,0 +1,11 @@
+---
+- name: Restart forgejo
+  systemd:
+    name: forgejo
+    state: restarted
+    daemon_reload: yes
+
+- name: Restart sshd
+  systemd:
+    name: ssh
+    state: restarted

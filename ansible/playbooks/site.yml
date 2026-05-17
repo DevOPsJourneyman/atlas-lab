@@ -1,0 +1,21 @@
+---
+# Full convergence — run on all managed LXCs
+- name: Base configuration
+  hosts: agents:mcp_hosts:git_servers:misc
+  roles:
+    - base_lxc
+
+- name: Configure Hermes agents
+  hosts: agents
+  roles:
+    - hermes_agent
+
+- name: Configure MCP services host
+  hosts: mcp_hosts
+  roles:
+    - mcp_services
+
+- name: Provision Forgejo git server
+  hosts: git_servers
+  roles:
+    - forgejo

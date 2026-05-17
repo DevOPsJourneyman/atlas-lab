@@ -1,0 +1,14 @@
+---
+# Configure or reconcile Hermes agent LXCs (201-203)
+# Idempotent — safe to run against live agents
+# Run: ansible-playbook playbooks/configure_agents.yml
+
+- name: Base setup for agent LXCs
+  hosts: agents
+  roles:
+    - base_lxc
+
+- name: Configure Hermes agent services
+  hosts: agents
+  roles:
+    - hermes_agent
