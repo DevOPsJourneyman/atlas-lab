@@ -1,5 +1,5 @@
 ---
-forgejo_version: "9.0.3"  # pin to latest stable at install time
+forgejo_version: "15.0.2"
 forgejo_arch: linux-amd64
 forgejo_user: git
 forgejo_group: git
