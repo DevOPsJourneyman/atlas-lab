@@ -23,6 +23,7 @@ brain for cross-agent knowledge.
 |--------|------|----|-------|
 | atlas01 | Proxmox Node 1 | 192.168.0.10 | HP EliteDesk 800 G3 SFF, 32GB RAM, 2x 250GB SSD |
 | atlas02 | Proxmox Node 2 | 192.168.0.11 | HP EliteDesk 800 G3 SFF, 32GB RAM, 2x 250GB SSD |
+| atlas04 | Proxmox Node 4 — AI inference | 192.168.0.13 | HP Z440, Xeon E5-2690 v4 (14c/28t), 128GB DDR4 ECC, RTX 3090 24GB |
 | TrueNAS | Storage Node | 192.168.0.12 | HP EliteDesk 800 G3 SFF, 24GB RAM, 3x 500GB HDD + NVMe boot |
 | kronos | Admin Workstation | 192.168.0.141 | HP EliteBook 850 G5, 32GB RAM |
 | atlas-pi01 | Raspberry Pi 4 | — | 4GB RAM, 32GB SD — offline (PSU failure) |
@@ -32,6 +33,7 @@ brain for cross-agent knowledge.
 ### VMs (100s)
 | VMID | Name | OS | Role | Host | IP |
 |------|------|----|------|------|----|
+| 100 | Astro | Ubuntu 26.04 | Local LLM inference (RTX 3090 passthrough) | atlas04 | 192.168.0.25 |
 | 101 | zeus01 | Ubuntu 24.04 | k3s control plane | atlas01 | 192.168.0.21 |
 | 102 | zeus02 | Ubuntu 24.04 | k3s worker 1 | atlas02 | 192.168.0.22 |
 | 103 | zeus03 | Ubuntu 24.04 | k3s worker 2 | atlas02 | 192.168.0.23 |
@@ -55,6 +57,8 @@ brain for cross-agent knowledge.
 **Infrastructure:** Proxmox VE (clustered) · TrueNAS SCALE (ZFS) · k3s (3-node)
 
 **AI Platform:** Hermes agent runtime · Qdrant vector DB · MCP (Model Context Protocol)
+
+**Local Inference:** llama.cpp (CUDA, Docker) · RTX 3090 · Qwen3.5-27B · GPU passthrough (VFIO)
 
 **Automation:** Ansible · systemd · NFS for shared agent context
 
@@ -93,6 +97,27 @@ Config deployed at `/home/zeus/.hermes/mcp_servers.json` (owner: `zeus:hermes`, 
 | Brain service | `ssh root@192.168.0.30 systemctl status mcp-brain` |
 | Qdrant status | `curl -s http://192.168.0.30:6333/health` |
 | Agent configs | `ansible agents -i ansible/inventory.ini -m command -a "ls -la /home/zeus/.hermes/mcp_servers.json" --become` |
+
+## Local LLM Inference — atlas04
+
+The newest node: an HP Z440 workstation upgraded specifically for local AI inference
+(CPU E5-1603 v3 → E5-2690 v4, GPU GT 740 → RTX 3090 24GB), joined to the cluster as
+the fourth Proxmox node. The GPU is passed through whole (VFIO) to a single VM —
+the Proxmox host runs no NVIDIA driver at all, so kernel updates can never break
+the inference stack.
+
+**Astro** (VM 100, 24 vCPU host-type, 64GB RAM) serves the LLM via Docker:
+
+- `llama.cpp` server (CUDA) running **Qwen3.5-27B** (Unsloth dynamic Q4 quant, fully
+  GPU-offloaded, flash attention, 64K context, ~39 tok/s) — OpenAI-compatible API
+  on `:8080`, consumed by the Pantheon agents as a local model provider
+- `restart=unless-stopped` + VM `onboot` + QEMU guest agent: the whole stack
+  recovers unattended from a cold node boot in under two minutes — verified
+
+Why a VM instead of an LXC container: passthrough to a VM keeps the host clean and
+decouples guest driver updates from the PVE kernel; a container would need the full
+NVIDIA stack on the host and version-matched libraries inside, and breaks on kernel
+upgrades. The ~1–3% virtualization overhead is noise for GPU-bound inference.
 
 ## Ansible Playbooks
 
