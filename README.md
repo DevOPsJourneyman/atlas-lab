@@ -25,9 +25,9 @@ disaster recovery practice. Moved through OPNsense (removed — too complex), k3
 (3-node cluster, decommissioned during cleanup), and into the current phase:
 an AI agent platform called the Pantheon, using Hermes as the agent runtime.
 
-The Pantheon is the current focus — four AI agents with distinct roles (LIFE, INTEL,
-INFRA, EXECUTION), running as unprivileged LXC containers with shared context over
-NFS and a centralized MCP layer for cross-agent knowledge.
+The Pantheon is the current focus — three active AI agents with distinct roles (LIFE, OPS, EXECUTION),
+running as unprivileged LXC containers with shared context over NFS and a centralized MCP layer for
+cross-agent knowledge. Tesla (INTEL) retired 2026-07-18, work absorbed by Santiago.
 
 ## Hardware Infrastructure
 
@@ -56,8 +56,8 @@ decommissioned during infrastructure cleanup. k3s is planned for revival.
 | CTID | Name | OS | Role | Host |
 |------|------|----|------|------|
 | 201 | Ramon | Debian 12 | LIFE — habits, body, water, daily briefings, VP domains | atlas01 |
-| 202 | Tesla | Debian 12 | INTEL — security monitoring, cost tracking, research | atlas01 |
-| 203 | Santiago | Debian 12 | INFRA/OPS — hardware recovery, diagnostics, ops, alerting | atlas01 |
+| 202 | Tesla | Debian 12 | ⚰️ INTEL — retired 2026-07-18, archive at `/Atlaspool/bot-data/shared/agent-graveyard/` | atlas01 |
+| 203 | Santiago | Debian 12 | OPS — infra health, DevOps, INTEL domain (post-Tesla) | atlas01 |
 | 204 | nero | Debian 12 | EXECUTION — binary task execution, no personality (test build) | atlas02 |
 
 ### Infrastructure Containers (300s)
@@ -82,8 +82,8 @@ decommissioned during infrastructure cleanup. k3s is planned for revival.
 
 ## Pantheon — AI Agent Platform
 
-Four agents running as Hermes-powered LXC containers, each with a defined role and personality.
-All agents share context over NFS and can access the centralized MCP layer for cross-agent knowledge.
+Three active agents running as Hermes-powered LXC containers, each with a defined role and personality.
+Tesla (INTEL) retired 2026-07-18 — SOUL.md and skills archived in agent-graveyard/.
 
 ### atlas-mcp — The Shared MCP Layer
 
@@ -155,4 +155,4 @@ ansible-playbook -i ansible/inventory.ini ansible/deploy_memory_mcp.yml
 
 ---
 
-*Last updated: 2026-07-14*
+*Last updated: 2026-07-18*
