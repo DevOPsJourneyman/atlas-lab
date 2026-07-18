@@ -25,9 +25,10 @@ disaster recovery practice. Moved through OPNsense (removed — too complex), k3
 (3-node cluster, decommissioned during cleanup), and into the current phase:
 an AI agent platform called the Pantheon, using Hermes as the agent runtime.
 
-The Pantheon is the current focus — two active AI agents with distinct roles (LIFE, OPS),
+The Pantheon is the current focus — two persistent AI agents (Ramon, Santiago) with distinct roles (LIFE, OPS),
 running as unprivileged LXC containers with shared context over NFS and a centralized MCP layer for
-cross-agent knowledge. Tesla (INTEL) and nero (EXECUTION) retired 2026-07-18, work absorbed by Santiago.
+cross-agent knowledge. Apollo (Oh My PI harness on Kronos) handles reactive execution and INTEL work.
+Tesla (INTEL) and nero (EXECUTION) retired 2026-07-18, work absorbed by Santiago and Apollo.
 
 ## Hardware Infrastructure
 
@@ -82,7 +83,8 @@ decommissioned during infrastructure cleanup. k3s is planned for revival.
 
 ## Pantheon — AI Agent Platform
 
-Two active agents running as Hermes-powered LXC containers, each with a defined role and personality.
+Two persistent agents running as Hermes-powered LXC containers, each with a defined role and personality.
+**Apollo** (Oh My PI harness on Kronos) serves as the reactive execution layer — coding, research, analysis.
 Tesla (INTEL) and nero (EXECUTION) retired 2026-07-18 — SOUL.md and eulogies archived in agent-graveyard/.
 
 ### atlas-mcp — The Shared MCP Layer
