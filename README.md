@@ -25,9 +25,9 @@ disaster recovery practice. Moved through OPNsense (removed — too complex), k3
 (3-node cluster, decommissioned during cleanup), and into the current phase:
 an AI agent platform called the Pantheon, using Hermes as the agent runtime.
 
-The Pantheon is the current focus — three active AI agents with distinct roles (LIFE, OPS, EXECUTION),
+The Pantheon is the current focus — two active AI agents with distinct roles (LIFE, OPS),
 running as unprivileged LXC containers with shared context over NFS and a centralized MCP layer for
-cross-agent knowledge. Tesla (INTEL) retired 2026-07-18, work absorbed by Santiago.
+cross-agent knowledge. Tesla (INTEL) and nero (EXECUTION) retired 2026-07-18, work absorbed by Santiago.
 
 ## Hardware Infrastructure
 
@@ -57,8 +57,8 @@ decommissioned during infrastructure cleanup. k3s is planned for revival.
 |------|------|----|------|------|
 | 201 | Ramon | Debian 12 | LIFE — habits, body, water, daily briefings, VP domains | atlas01 |
 | 202 | Tesla | Debian 12 | ⚰️ INTEL — retired 2026-07-18, archive at `/Atlaspool/bot-data/shared/agent-graveyard/` | atlas01 |
-| 203 | Santiago | Debian 12 | OPS — infra health, DevOps, INTEL domain (post-Tesla) | atlas01 |
-| 204 | nero | Debian 12 | EXECUTION — binary task execution, no personality (test build) | atlas02 |
+| 203 | Santiago | Debian 12 | OPS — infra health, DevOps, INTEL domain, SearXNG | atlas01 |
+| 204 | nero | Debian 12 | ⚰️ EXECUTION — test build, retired 2026-07-18, archive at `/Atlaspool/bot-data/shared/agent-graveyard/` | atlas02 |
 
 ### Infrastructure Containers (300s)
 
@@ -82,8 +82,8 @@ decommissioned during infrastructure cleanup. k3s is planned for revival.
 
 ## Pantheon — AI Agent Platform
 
-Three active agents running as Hermes-powered LXC containers, each with a defined role and personality.
-Tesla (INTEL) retired 2026-07-18 — SOUL.md and skills archived in agent-graveyard/.
+Two active agents running as Hermes-powered LXC containers, each with a defined role and personality.
+Tesla (INTEL) and nero (EXECUTION) retired 2026-07-18 — SOUL.md and eulogies archived in agent-graveyard/.
 
 ### atlas-mcp — The Shared MCP Layer
 
