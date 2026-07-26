@@ -34,10 +34,9 @@ Tesla (INTEL) and nero (EXECUTION) retired 2026-07-18, work absorbed by Santiago
 
 | Device | Role | Specs |
 |--------|------|-------|
-| atlas01 | Proxmox Node 1 | HP EliteDesk 800 G3 SFF, 32GB RAM, 2x 250GB SSD |
-| atlas02 | Proxmox Node 2 | HP EliteDesk 800 G3 SFF, 32GB RAM, 2x 250GB SSD |
-| atlas03 | Proxmox Node 3 + NFS Storage | HP EliteDesk 800 G3 SFF, 24GB RAM, 3x 500GB HDD + NVMe boot |
-| atlas04 | Proxmox Node 4 — AI Inference | HP Z440, Xeon E5-2690 v4 (14c/28t), 128GB DDR4 ECC, RTX 3090 24GB |
+| atlas01 | Proxmox Node 1 | Lenovo M920q Tiny, i5-8500T, 32GB RAM |
+| atlas02 | Proxmox Node 2 | Lenovo M920q Tiny, i5-8500T, 32GB RAM |
+| atlas03 | Proxmox Node 3 + NFS Storage — AI Inference | HP Z440, Xeon E5-2690 v4 (14c/28t), 135GB DDR4 ECC, RTX 3090 24GB (physically the former atlas04) |
 | kronos | Admin Workstation | HP EliteBook 850 G5, 32GB RAM, Ubuntu LTS |
 | atlas-pi01 | Raspberry Pi 4 | 4GB RAM, 32GB SD — offline (PSU failure) |
 
@@ -47,7 +46,7 @@ Tesla (INTEL) and nero (EXECUTION) retired 2026-07-18, work absorbed by Santiago
 
 | VMID | Name | OS | Role | Host |
 |------|------|----|------|------|
-| 100 | Astro | Ubuntu LTS | Local LLM inference (RTX 3090 passthrough) | atlas04 |
+| 100 | Astro | Ubuntu LTS | Local LLM inference (RTX 3090 passthrough) | atlas03 |
 
 **Note:** Previous k3s cluster (zeus01-03) and security testing VM (kali01) were
 decommissioned during infrastructure cleanup. k3s is planned for revival.
@@ -67,11 +66,13 @@ decommissioned during infrastructure cleanup. k3s is planned for revival.
 |------|------|----|------|------|
 | 301 | atlas-mcp | Debian 12 | MCP services (6 servers: calendar, filesystem, proxmox, research, tasks, memory) | atlas02 |
 | 303 | atlas-git | Debian 12 | Forgejo (self-hosted git server) | atlas02 |
-| 304 | jellyfish | Debian 12 | Jellyfin media server | atlas03 |
+
+**Note:** CT 304 (jellyfish/Jellyfin) was not carried over during the atlas03/atlas04 storage
+consolidation and no longer exists.
 
 ## Technology Stack
 
-**Infrastructure:** Proxmox VE (4-node cluster) · NFS storage (ZFS backend)
+**Infrastructure:** Proxmox VE (3-node cluster) · NFS storage (ZFS backend)
 
 **AI Platform:** Hermes agent runtime · Vector database for memory · MCP (Model Context Protocol)
 
@@ -107,11 +108,12 @@ Agents connect via per-agent configuration files in their Hermes home directorie
 | Vector DB health | `curl -s http://localhost:<port>/health` (from atlas-mcp) |
 | Agent configs | `ansible agents -i ansible/inventory.ini -m command -a "ls -la ~/.hermes/" --become` |
 
-## Local LLM Inference — atlas04
+## Local LLM Inference — atlas03
 
-The newest node: an HP Z440 workstation upgraded specifically for local AI inference
-(CPU E5-1603 v3 → E5-2690 v4, GPU GT 740 → RTX 3090 24GB), joined to the cluster as
-the fourth Proxmox node. The GPU is passed through whole (VFIO) to a single VM —
+An HP Z440 workstation upgraded specifically for local AI inference (CPU E5-1603 v3 →
+E5-2690 v4, GPU GT 740 → RTX 3090 24GB); originally joined the cluster as atlas04, later
+renamed atlas03 during the storage/GPU consolidation. The GPU is passed through whole (VFIO)
+to a single VM —
 the Proxmox host runs no NVIDIA driver at all, so kernel updates can never break
 the inference stack.
 
